@@ -28,5 +28,11 @@ export class MoviesService {
       ...movieData
     })
   }
+  
+  update(id:string, updateData){ // 업데이트할 movie를 가져오고, 가져온 movie를 지우고, 과거의데이터와 새로운데이터를 더해서 새로운 movie 를 만든다.
+    const movie = this.getOne(id); 
+    this.deleteOne(id);
+    this.movies.push({...movie, ...updateData});
+  }
 
 }
