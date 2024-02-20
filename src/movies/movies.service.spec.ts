@@ -30,6 +30,7 @@ describe('MoviesService', () => {  // describe는 테스트를 묘사하는 단�
         title:'테스트',
         genres:['test'],
         year: 2022
+      })
     })
     const movie = service.getOne(1);
     expect(movie).toBeDefined();
@@ -42,8 +43,31 @@ describe('MoviesService', () => {  // describe는 테스트를 묘사하는 단�
       expect(e).toBeInstanceOf(NotFoundException);
     }
   })
-})
+
+  describe('deleteOne', ()=>{ //  movie 하나를 지우는것이 제대로 동작하였을 경우
+    it('영화를 삭제하였는가', ()=>{
+      service.create({
+        title:'테스트',
+        genres:['test'],
+        year: 2022
+      })
+    })
+    const allMovies = service.getAll();
+    service.deleteOne(1);
+    const afterDelete = service.getAll();
+    expect(afterDelete.length).toEqual(allMovies.length -1);  // 전체무비에서 한 개가 삭제되었기 때문에 afterDelete는 전체영화에서 -1이 되어야 한다.
+  })
+
+  it('404에러를 보여주고 있는가', ()=>{
+    try{
+      service.deleteOne(999);  // movieId로 deleteOne을 하면 404에러를 return해야 한다.
+    }catch(e){
+      expect(e).toBeInstanceOf(NotFoundException);
+    }
+  })
+
 });
+
 
 
 // 유닛테스팅은 모든 함수를 따로 테스트 하는 것을 말한다. 서비스에서 분리된 유닛을 테스트한다. 예를들면 getAll()함수 하나만 테스트하고 싶을 때 사용한다.
