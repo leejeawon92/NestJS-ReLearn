@@ -66,6 +66,32 @@ describe('MoviesService', () => {  // describe는 테스트를 묘사하는 단�
     }
   })
 
+  describe('create', ()=> {  // movie의 개수가 얼만큼 늘어났는지, 마지막으로 생성된 movie가 이것이 맞는지 등을 test해볼 수 있다
+    it('영화를 제대로 생성하였는가', ()=>{
+      const beforeCreate = service.getAll().length;
+      service.create({
+        title:'테스트3',
+        genres:['test3'],
+        year: 2022
+      })
+      const afterCreate = service.getAll().length;
+      expect(afterCreate).toBeGreaterThan(beforeCreate);
+    })
+  })
+
+  describe('update', ()=> {
+    it('영화가 업데이트 되었는가', ()=>{
+      service.create({
+        title:'테스트4',
+        genres:['test4'],
+        year: 2022
+      })
+      service.update(1, {title:'update 테스트4'});
+      const movie= service.getOne(1);
+      expect(movie.title).toEqual('update 테스트4');
+    })
+  })
+
 });
 
 
