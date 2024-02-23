@@ -21,6 +21,24 @@ describe('AppController (e2e)', () => {
       .expect(200)
       .expect('Hello World!');
   });
+
+  describe('/movies', ()=> {
+    it('GET', () => {
+      return request(app.getHttpServer()).get('/movies').expect(200).expect([])
+    })
+  })
+
+  it('POST', ()=>{
+    return request(app.getHttpServer())
+      .post('/movies')
+      .send({title:'e2eTest', year:2022, genres:['e2eTest']})
+      .expect(201)
+  })
+
+  it('DELETE', ()=> {
+    return request(app.getHttpServer()).delete('/movies').expect(404);
+  })
+  
 });
 
 
