@@ -1,17 +1,23 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
 
-  beforeEach(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-
+  beforeAll(async () => {
+    const moduleFixture: TestingModule = await Test.createTestingModule({ // 테스팅을 진행할 때 nestJS는 아래처럼 테스트마다 애플리케이션을 생성하고 있다 여기서 npm run start:dev에서
+      imports: [AppModule],                                               // 생성하는 애플리케이션이랑은 다르다. npm run start:dev는 브라우저에서 테스트할 수 있는 진짜 애플리케이션 이고 아래의 다른 애플리케이션은 각 테스트를 위한 것이다.
+    }).compile();                                                          
     app = moduleFixture.createNestApplication();
+    app.useGlobalPipes(
+      new ValidationPipe({
+        whitelist: true,
+        forbidNonWhitelisted: true,
+        transform: true
+      })
+    )
     await app.init();
   });
 
@@ -37,6 +43,14 @@ describe('AppController (e2e)', () => {
 
   it('DELETE', ()=> {
     return request(app.getHttpServer()).delete('/movies').expect(404);
+  })
+
+  describe('/movies/:id', ()=> { // POST에서 새로 생성한 movie의 id가 1이라는 것을 알기 때문에 request(app.getHttpServer()).get('movies/1') 와 같이 작성하면 일치하는 부분이 나올 것이다. => 결과: 404에러
+    it('GET 200', ()=>{
+      return request(app.getHttpServer())
+        .get('/movies/1')
+        .expect(200);
+    })
   })
   
 });

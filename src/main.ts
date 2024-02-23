@@ -19,3 +19,8 @@ bootstrap();
 // 파이프는 미들웨어라고 생각하면 된다.
 // 사용할 파이프를 nestJS애플리케이션에게 넘겨준다. 
 
+
+// <app.e2e-spec.ts의 '/movies/:id'부분에서 에러가 난 이유>
+//  transform: true은 controller에서의 getOne(@Param('id') movieId:number)를 보면 원래 url은 string타입이지만 transform속성을 이용하여 number타입으로 자동변환했었다.
+//  하지만, e2e테스트에서는 transform속성이 적용되지 않는 것이다.
+//  따라서, 2e테스트 or 유닛테스트시 주의할 점은 테스트에서도 실제 애플리케이션의 환경을 그대로 적용시켜줘야 한다. 즉, 실제에서 적용시킨 pipe들을 테스트에서도 동일하게 적용시켜야 한다는 뜻
