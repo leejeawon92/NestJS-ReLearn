@@ -52,6 +52,19 @@ describe('AppController (e2e)', () => {
         .expect(200);
     })
   })
+
+  it('PATCH 200', ()=> {
+    return request(app.getHttpServer())
+      .patch('/movies/1')
+      .send({title: 'update e2e TEST'})
+      .expect(200);
+  })
+
+  it('DELETE 200', ()=>{
+    return request(app.getHttpServer())
+      .delete('/movies/1')
+      .expect(200);
+  })
   
 });
 
