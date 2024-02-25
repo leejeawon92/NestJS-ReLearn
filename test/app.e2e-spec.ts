@@ -34,11 +34,18 @@ describe('AppController (e2e)', () => {
     })
   })
 
-  it('POST', ()=>{
+  it('POST 201', ()=>{
     return request(app.getHttpServer())
       .post('/movies')
       .send({title:'e2eTest', year:2022, genres:['e2eTest']})
       .expect(201)
+  })
+
+  it('POST 400', ()=>{ // 잘못된 데이터를 가진 movie를 create하는지 여부확인
+    return request(app.getHttpServer())
+      .post('/movies')
+      .send({title:'e2eTest', year:2022, genres:['e2eTest'], fail:123})
+      .expect(400);
   })
 
   it('DELETE', ()=> {
